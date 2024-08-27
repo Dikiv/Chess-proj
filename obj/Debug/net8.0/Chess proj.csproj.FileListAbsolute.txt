@@ -1,0 +1,14 @@
+C:\Users\Chris\Desktop\Chess proj\bin\Debug\net8.0\Chess proj.exe
+C:\Users\Chris\Desktop\Chess proj\bin\Debug\net8.0\Chess proj.deps.json
+C:\Users\Chris\Desktop\Chess proj\bin\Debug\net8.0\Chess proj.runtimeconfig.json
+C:\Users\Chris\Desktop\Chess proj\bin\Debug\net8.0\Chess proj.dll
+C:\Users\Chris\Desktop\Chess proj\bin\Debug\net8.0\Chess proj.pdb
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\Chess proj.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\Chess proj.AssemblyInfoInputs.cache
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\Chess proj.AssemblyInfo.cs
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\Chess proj.csproj.CoreCompileInputs.cache
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\Chess proj.dll
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\refint\Chess proj.dll
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\Chess proj.pdb
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\Chess proj.genruntimeconfig.cache
+C:\Users\Chris\Desktop\Chess proj\obj\Debug\net8.0\ref\Chess proj.dll
