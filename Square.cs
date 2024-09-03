@@ -19,7 +19,9 @@ class Square{
     }
 
     public void placePiece(Piece p){
+        Console.WriteLine("PLACED");
         this.P = p;
+
     }
 
     public void removePiece(){

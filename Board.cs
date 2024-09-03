@@ -166,11 +166,14 @@ class Board{
         return this.positions;
     }
 
-    public Board movePiece((int,int)location, Piece p, (int,int) dest){
+    public Board movePiece((int,int)location, (int,int) dest){
         var tmp = this.positions;
+        var pieceToMove = tmp[location.Item1,location.Item2].GetPiece();
         if(dest.Item1 < dim && dest.Item1 > -1 && dest.Item1 < dim && dest.Item2 > -1){
+        
+        tmp[dest.Item1,dest.Item2].placePiece(pieceToMove);
         tmp[location.Item1,location.Item2].removePiece();
-        tmp[dest.Item1,dest.Item2].placePiece(p);
+        
         this.positions = tmp;
         }
         return this;

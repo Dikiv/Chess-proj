@@ -2,19 +2,27 @@
 using System.Text.RegularExpressions;
 
 var x = new Board(8,false);
+x.movePiece((1,0),(2,0));
+// printallmoves(x);
+x.printBoard(false);
 
-foreach(Square s in x.getBoard()){
-    if(s.GetPiece() is not null){
-        var m = s.GetPiece().Move(s.getCoordinate().Item1,s.getCoordinate().Item2,x);
-        Console.WriteLine(s.GetPiece().getColor() + " " + s.Show() + "  (" + s.getCoordinate() + ") can move: ");
-        foreach(var p in m){
-            Console.WriteLine(p);
+
+void printallmoves(Board x){
+    foreach(Square s in x.getBoard()){
+            if(s.GetPiece() is not null){
+                var m = s.GetPiece().Move(s.getCoordinate().Item1,s.getCoordinate().Item2,x);
+                Console.WriteLine(s.GetPiece().getColor() + " " + s.Show() + "  (" + s.getCoordinate() + ") can move: ");
+                foreach(var p in m){
+                    Console.WriteLine(p);
+                }
+                Console.WriteLine("-----------------------------------");
+            }
         }
-        Console.WriteLine("-----------------------------------");
-    }
 }
 
-whiteTurn(x);
+
+
+//whiteTurn(x);
 
 void whiteTurn(Board board){
     
@@ -102,7 +110,7 @@ Dictionary<(int,int),List<(int,int)>> getLegalMoves(Board board, bool side, bool
                 if(mov.Item1 < tmpBoard.getDim() && mov.Item1 > -1 && mov.Item2 < tmpBoard.getDim() && mov.Item2 > -1){
 
                 Console.WriteLine(mov);
-                tmpmove.movePiece(s.getCoordinate(), piece, mov);
+                //tmpmove.movePiece(s.getCoordinate(), piece, mov);
                 
                 if(!isKingChecked(tmpmove,side)){
                     if(legalMoves.ContainsKey(s.getCoordinate())){
