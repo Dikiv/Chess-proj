@@ -49,12 +49,15 @@ void whiteTurn(Board board){
     printmylegalmoves(x, true);
     //Console.WriteLine("__________________________________");
     var mymoves = getmylegalmoves(x,side);
+    var pattern = "([QKBNPR]?)([x]?)([abcdefgh12345678]{2})([+]?)";
+    Regex r = new Regex(pattern);
+
     //var moves = getLegalMoves(board, side, isKingChecked(board, side));
     //scanner 
 
     while(true){
         
-        ReadPlayerInput();
+        var input = ReadPlayerInput();
 
         /*
         Convert.ToInt32(input.Split(','));
@@ -192,3 +195,28 @@ Dictionary<Square,List<(int,int)>> getmylegalmoves(Board b, bool color){
 }
 
 
+void parseInput(string text){
+          // Instantiate the regular expression object.
+      var pattern = "([QKBNPR]?)([x]?)([abcdefgh12345678]{2})([+]?)";
+      Regex r = new Regex(pattern);
+
+      // Match the regular expression pattern against a text string.
+      Match m = r.Match(text);
+      int matchCount = 0;
+      while (m.Success)
+      {
+         Console.WriteLine("Match"+ (++matchCount));
+         for (int i = 1; i <= 2; i++)
+         {
+            Group g = m.Groups[i];
+            Console.WriteLine("Group"+i+"='" + g + "'");
+            CaptureCollection cc = g.Captures;
+            for (int j = 0; j < cc.Count; j++)
+            {
+               Capture c = cc[j];
+               System.Console.WriteLine("Capture"+j+"='" + c + "', Position="+c.Index);
+            }
+         }
+         m = m.NextMatch();
+      }
+}
