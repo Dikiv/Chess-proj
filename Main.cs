@@ -2,14 +2,15 @@
 using System.Text.RegularExpressions;
 
 var x = new Board(8,false);
-x.movePiece((1,0),(2,0));
-// printallmoves(x);
-x.printBoard(false);
+//x.movePiece((1,0),(2,0));
+//printallmoves(x);
+//x.printBoard(false);
+whiteTurn(x);
 
-
-void printallmoves(Board x){
-    foreach(Square s in x.getBoard()){
+void printallmoves(Board b){
+    foreach(Square s in b.getBoard()){
             if(s.GetPiece() is not null){
+
                 var m = s.GetPiece().Move(s.getCoordinate().Item1,s.getCoordinate().Item2,x);
                 Console.WriteLine(s.GetPiece().getColor() + " " + s.Show() + "  (" + s.getCoordinate() + ") can move: ");
                 foreach(var p in m){
@@ -20,28 +21,40 @@ void printallmoves(Board x){
         }
 }
 
+void printmylegalmoves(Board b, bool color){
+    foreach(Square s in b.getBoard()){
+            if(s.GetPiece() is not null && s.GetPiece().getColor() == color){
+                var m = s.GetPiece().Move(s.getCoordinate().Item1,s.getCoordinate().Item2,x);
+                Console.WriteLine(s.GetPiece().getColor() + " " + s.Show() + "  (" + s.getCoordinate() + ") can move: ");
+                foreach(var p in m){
+                    Console.WriteLine(p);
+                }
+                Console.WriteLine("-----------------------------------");
+            }
+    }
+}
+
 
 
 //whiteTurn(x);
 
 void whiteTurn(Board board){
-    
+    bool side = true;
+    /*
     if(isCheckmated(board, true)){
         Console.WriteLine("------ BLACK WINS ------");
         //return board;
     }
-    
-    board.printBoard(false);
-
+    */
+    printmylegalmoves(x, true);
+    //Console.WriteLine("__________________________________");
+    var mymoves = getmylegalmoves(x,side);
+    //var moves = getLegalMoves(board, side, isKingChecked(board, side));
     //scanner 
+
     while(true){
         
-        string input = Console.ReadLine();
-
-        string[] splits = Regex.Split(input, @"(?<=\d)|,");
-        foreach (string s in splits){
-            Console.WriteLine(s);
-        }
+        ReadPlayerInput();
 
         /*
         Convert.ToInt32(input.Split(','));
@@ -57,14 +70,14 @@ void whiteTurn(Board board){
 
 void blackTurn(Board board){
     bool side = false;
-
+    
     if(isCheckmated(board, side)){
         Console.WriteLine("------ WHITE WINS ------");
     }
 
     board.printBoard(true);
     
-    var moves = getLegalMoves(board, side, isKingChecked(board, side));
+    //var moves = getLegalMoves(board, side, isKingChecked(board, side));
     
     //scanner 
     while(true){
@@ -141,6 +154,41 @@ bool isKingChecked(Board board, bool side){
         } 
     }
     return false;    
+}
+
+String ReadPlayerInput(){
+    
+    string input = Console.ReadLine();
+    Console.WriteLine(input);
+    return input;
+}
+
+Dictionary<Square,List<(int,int)>> getmylegalmoves(Board b, bool color){
+    var myMoves = new Dictionary<Square,List<(int,int)>>();
+    foreach(Square s in b.getBoard()){
+            if(s.GetPiece() is not null && s.GetPiece().getColor() == color){
+                var m = s.GetPiece().Move(s.getCoordinate().Item1,s.getCoordinate().Item2,x);
+                
+                if(!myMoves.ContainsKey(s)){
+                    myMoves.Add(s,[]);
+                }
+                var pieceMoves = new List<(int,int)>();
+
+                //Console.WriteLine(s.GetPiece().getColor() + " " + s.Show() + "  (" + s.getCoordinate() + ") can move: ");
+                foreach(var p in m){
+                    //Console.WriteLine(p);
+                    myMoves.TryGetValue(s, out pieceMoves);
+                    pieceMoves.Add(p);
+
+                    
+                }
+                foreach(var e in pieceMoves){
+                    //Console.WriteLine(e);
+                }
+                //Console.WriteLine("-----------------------------------");
+            }
+    }
+    return myMoves;
 }
 
 
