@@ -218,10 +218,10 @@ Dictionary<Square,List<(int,int)>> getmylegalmoves(Board b, bool color){
                 
             }else{
                 Console.WriteLine("Position: " + cc[0]);
-                col = Convert.ToInt32(cc[0].ToString().ToCharArray()[0])-96;
+                col = Convert.ToInt32(cc[0].ToString().ToCharArray()[0])-97;
                 Console.WriteLine(col);
 
-                row = Convert.ToInt32(cc[0].ToString().ToCharArray()[1]-48);
+                row = Convert.ToInt32(cc[0].ToString().ToCharArray()[1]-49);
                 Console.WriteLine(row);
 
             }   
