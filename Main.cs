@@ -1,4 +1,5 @@
 ﻿
+using System.Data;
 using System.Text.RegularExpressions;
 
 var x = new Board(8,false);
@@ -49,23 +50,21 @@ void whiteTurn(Board board){
     printmylegalmoves(x, true);
     //Console.WriteLine("__________________________________");
     var mymoves = getmylegalmoves(x,side);
-    var pattern = "([QKBNPR]?)([x]?)([abcdefgh12345678]{2})([+]?)";
-    Regex r = new Regex(pattern);
-
-    //var moves = getLegalMoves(board, side, isKingChecked(board, side));
-    //scanner 
 
     while(true){
         
-        var input = ReadPlayerInput();
-
-        /*
-        Convert.ToInt32(input.Split(','));
-        
-        if(moves.ContainsKey(input)){
-           moves.TryGetValue(input, out side);
+        var pieceToMove = parseInput(ReadPlayerInput());
+        Console.WriteLine(pieceToMove);
+        var placeToMove = parseInput(ReadPlayerInput());
+        Console.WriteLine(placeToMove);
+        if((pieceToMove.Item1 > -1 || pieceToMove.Item2 > -1) && 
+            (placeToMove.Item1 > -1 || placeToMove.Item2 > -1) &&
+            (placeToMove.Item1 < 9 || placeToMove.Item2 < 9) && 
+            (pieceToMove.Item1 < 9 || pieceToMove.Item2 < 9) ){
+            board.movePiece(pieceToMove,placeToMove);
+            board.printBoard(side);
         }
-        */
+        
     }
 
     //return board;
@@ -195,28 +194,40 @@ Dictionary<Square,List<(int,int)>> getmylegalmoves(Board b, bool color){
 }
 
 
-void parseInput(string text){
+(int,int) parseInput(string text){
           // Instantiate the regular expression object.
-      var pattern = "([QKBNPR]?)([x]?)([abcdefgh12345678]{2})([+]?)";
+            //OG Pattern = @"([QKBNPR]?)([x]?)([abcdefgh12345678]{2})([+]?)";
+      var pattern = @"([QKBNPR]?)([abcdefgh12345678]{2})";
       Regex r = new Regex(pattern);
 
-      // Match the regular expression pattern against a text string.
+      var row = -1;
+      var col = -1;
+
       Match m = r.Match(text);
-      int matchCount = 0;
+
       while (m.Success)
       {
-         Console.WriteLine("Match"+ (++matchCount));
+
          for (int i = 1; i <= 2; i++)
          {
             Group g = m.Groups[i];
-            Console.WriteLine("Group"+i+"='" + g + "'");
             CaptureCollection cc = g.Captures;
-            for (int j = 0; j < cc.Count; j++)
-            {
-               Capture c = cc[j];
-               System.Console.WriteLine("Capture"+j+"='" + c + "', Position="+c.Index);
-            }
+                
+            if(i%2 == 1){
+                Console.WriteLine("Piece: " + cc[0]);
+                
+            }else{
+                Console.WriteLine("Position: " + cc[0]);
+                col = Convert.ToInt32(cc[0].ToString().ToCharArray()[0])-96;
+                Console.WriteLine(col);
+
+                row = Convert.ToInt32(cc[0].ToString().ToCharArray()[1]-48);
+                Console.WriteLine(row);
+
+            }   
          }
+
          m = m.NextMatch();
       }
+      return (row,col);
 }
