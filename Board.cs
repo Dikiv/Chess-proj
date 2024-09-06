@@ -1,4 +1,6 @@
 
+using System.ComponentModel;
+
 class Board{
     private Square[,] positions;
     private int dim;
@@ -26,10 +28,11 @@ class Board{
 
     public void printBoard(bool side){
         drawLine();
-        if(side){
+        if(!side){
+            //prints for black
             for (int i = 0; i < dim; i++){
             //Console.Write('|');
-            for(int j = 0;j<dim; j++){   
+            for(int j = dim-1;j>-1; j--){   
                 Console.Write('|');
                 Console.Write(positions[i,j].Show());
             }
@@ -38,9 +41,10 @@ class Board{
             drawLine();
             }
         }else{
+            //prints for white
             for (int i = dim-1; i > -1; i--){
             //Console.Write('|');
-            for(int j = dim-1;j>-1; j--){   
+            for(int j = 0;j<dim; j++){   
                 Console.Write('|');
                 Console.Write(positions[i,j].Show());
             }
@@ -121,15 +125,15 @@ class Board{
 
         //create Queens
         //White 
-        positions[0,4].placePiece(new Queen(true,9));
+        positions[0,3].placePiece(new Queen(true,9));
         //Black
-        positions[7,4].placePiece(new Queen(false,9));
+        positions[7,3].placePiece(new Queen(false,9));
         
         //create Kings
         //White
-        positions[0,3].placePiece(new King(true,100));
+        positions[0,4].placePiece(new King(true,100));
         //Black
-        positions[7,3].placePiece(new King(false,100));
+        positions[7,4].placePiece(new King(false,100));
         
     }
 
@@ -166,15 +170,33 @@ class Board{
         return this.positions;
     }
 
-    public Board movePiece((int,int)location, (int,int) dest){
+    public Board movePiece((int,int)location, (int,int) dest, bool side){
         var tmp = this.positions;
-        var pieceToMove = tmp[location.Item1,location.Item2].GetPiece();
-        if(dest.Item1 < dim && dest.Item1 > -1 && dest.Item1 < dim && dest.Item2 > -1){
+        var pieceToMove = tmp[location.Item1,location.Item2].GetPiece()!;
+        var movesAvailable = pieceToMove.Move(location.Item1,location.Item2,this);
+        var attacksAvailable = pieceToMove.Attack(location.Item1,location.Item2,this);
+
+        if(movesAvailable.Contains(dest) || attacksAvailable.Contains(dest)){
         
         tmp[dest.Item1,dest.Item2].placePiece(pieceToMove);
         tmp[location.Item1,location.Item2].removePiece();
         
         this.positions = tmp;
+        }else{
+        Console.WriteLine("Illegal move");
+        Console.WriteLine("  ");
+        Console.WriteLine(pieceToMove + " " + location + " can move to: ");
+        foreach(var elem in movesAvailable){
+            Console.WriteLine(elem);
+        }
+
+        Console.WriteLine(pieceToMove + " " + location + " can attack: ");
+        foreach(var elem in attacksAvailable){
+            Console.WriteLine(elem);
+        }
+        Console.WriteLine("  ");
+
+        printBoard(side);
         }
         return this;
     }

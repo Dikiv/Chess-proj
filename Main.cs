@@ -2,7 +2,7 @@
 using System.Data;
 using System.Text.RegularExpressions;
 
-var x = new Board(8,false);
+var x = new Board(8,true);
 //x.movePiece((1,0),(2,0));
 //printallmoves(x);
 //x.printBoard(false);
@@ -47,59 +47,70 @@ void whiteTurn(Board board){
         //return board;
     }
     */
-    printmylegalmoves(x, true);
+    //printmylegalmoves(x, true);
     //Console.WriteLine("__________________________________");
-    var mymoves = getmylegalmoves(x,side);
-
+    //var mymoves = getmylegalmoves(x,side);
+    var tmpBoard = board.getBoard();
     while(true){
         
         var pieceToMove = parseInput(ReadPlayerInput());
-        Console.WriteLine(pieceToMove);
+        //Console.WriteLine(pieceToMove);
         var placeToMove = parseInput(ReadPlayerInput());
-        Console.WriteLine(placeToMove);
+        //Console.WriteLine(placeToMove);
         if((pieceToMove.Item1 > -1 || pieceToMove.Item2 > -1) && 
             (placeToMove.Item1 > -1 || placeToMove.Item2 > -1) &&
-            (placeToMove.Item1 < 9 || placeToMove.Item2 < 9) && 
-            (pieceToMove.Item1 < 9 || pieceToMove.Item2 < 9) ){
-            board.movePiece(pieceToMove,placeToMove);
-            board.printBoard(side);
+            (placeToMove.Item1 < 8 || placeToMove.Item2 < 8) && 
+            (pieceToMove.Item1 < 8 || pieceToMove.Item2 < 8) ){
+            board.movePiece(pieceToMove,placeToMove,side);
+
+            
         }
-        
+        Console.WriteLine();
+
+        if(board.getBoard()[placeToMove.Item1,placeToMove.Item2].GetPiece() != null && 
+            board.getBoard()[pieceToMove.Item1,pieceToMove.Item2].GetPiece() == null){
+            //Console.WriteLine("SWAP");
+            break;
+        }        
     }
+    board.printBoard(!side);
+    blackTurn(board);
 
     //return board;
 } 
 
 void blackTurn(Board board){
     bool side = false;
-    
+    /*
     if(isCheckmated(board, side)){
         Console.WriteLine("------ WHITE WINS ------");
     }
+    */
+    var tmpBoard = board;
 
-    board.printBoard(true);
-    
-    //var moves = getLegalMoves(board, side, isKingChecked(board, side));
-    
-    //scanner 
     while(true){
         
-        string input = Console.ReadLine();
-        string[] splits = Regex.Split(input, @"(?<=\d)");
-        foreach (string s in splits){
-            Console.WriteLine(s);
+        var pieceToMove = parseInput(ReadPlayerInput());
+        //Console.WriteLine(pieceToMove);
+        var placeToMove = parseInput(ReadPlayerInput());
+        //Console.WriteLine(placeToMove);
+        if((pieceToMove.Item1 > -1 || pieceToMove.Item2 > -1) && 
+            (placeToMove.Item1 > -1 || placeToMove.Item2 > -1) &&
+            (placeToMove.Item1 < 8 || placeToMove.Item2 < 8) && 
+            (pieceToMove.Item1 < 8 || pieceToMove.Item2 < 8) ){
+            board.movePiece(pieceToMove,placeToMove,side);
+
+            
         }
 
-        /*
-        Convert.ToInt32(input.Split(','));
-        
-        if(moves.ContainsKey(input)){
-           moves.TryGetValue(input, out side);
-        }
-        */
+        if(board.getBoard()[placeToMove.Item1,placeToMove.Item2].GetPiece() != null && 
+            board.getBoard()[pieceToMove.Item1,pieceToMove.Item2].GetPiece() == null){
+            //Console.WriteLine("SWAP");
+            break;
+        }        
     }
-    
-    
+    board.printBoard(!side);
+    whiteTurn(board);
 }
 
 bool isCheckmated(Board board, bool side){
@@ -161,7 +172,7 @@ bool isKingChecked(Board board, bool side){
 String ReadPlayerInput(){
     
     string input = Console.ReadLine();
-    Console.WriteLine(input);
+    //Console.WriteLine(input);
     return input;
 }
 
@@ -214,15 +225,15 @@ Dictionary<Square,List<(int,int)>> getmylegalmoves(Board b, bool color){
             CaptureCollection cc = g.Captures;
                 
             if(i%2 == 1){
-                Console.WriteLine("Piece: " + cc[0]);
+                //Console.WriteLine("Piece: " + cc[0]);
                 
             }else{
-                Console.WriteLine("Position: " + cc[0]);
+                //Console.WriteLine("Position: " + cc[0]);
                 col = Convert.ToInt32(cc[0].ToString().ToCharArray()[0])-97;
-                Console.WriteLine(col);
+                //Console.WriteLine(col);
 
                 row = Convert.ToInt32(cc[0].ToString().ToCharArray()[1]-49);
-                Console.WriteLine(row);
+                //Console.WriteLine(row);
 
             }   
          }
