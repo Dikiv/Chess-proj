@@ -1,5 +1,6 @@
 
 using System.ComponentModel;
+using System.Linq.Expressions;
 
 class Board{
     private Square[,] positions;
@@ -172,32 +173,38 @@ class Board{
 
     public Board movePiece((int,int)location, (int,int) dest, bool side){
         var tmp = this.positions;
+        
+        try{
         var pieceToMove = tmp[location.Item1,location.Item2].GetPiece()!;
         var movesAvailable = pieceToMove.Move(location.Item1,location.Item2,this);
         var attacksAvailable = pieceToMove.Attack(location.Item1,location.Item2,this);
 
-        if(movesAvailable.Contains(dest) || attacksAvailable.Contains(dest)){
+            if(movesAvailable.Contains(dest) || attacksAvailable.Contains(dest)){
+                tmp[dest.Item1,dest.Item2].placePiece(pieceToMove);
+                tmp[location.Item1,location.Item2].removePiece();
         
-        tmp[dest.Item1,dest.Item2].placePiece(pieceToMove);
-        tmp[location.Item1,location.Item2].removePiece();
-        
-        this.positions = tmp;
-        }else{
-        Console.WriteLine("Illegal move");
-        Console.WriteLine("  ");
-        Console.WriteLine(pieceToMove + " " + location + " can move to: ");
-        foreach(var elem in movesAvailable){
-            Console.WriteLine(elem);
-        }
+            this.positions = tmp;
+            }else{
+                Console.WriteLine("Illegal move");
+                Console.WriteLine("  ");
+                Console.WriteLine(pieceToMove + " " + location + " can move to: ");
+            foreach(var elem in movesAvailable){
+                Console.WriteLine(elem);
+            }
 
-        Console.WriteLine(pieceToMove + " " + location + " can attack: ");
-        foreach(var elem in attacksAvailable){
-            Console.WriteLine(elem);
+            Console.WriteLine(pieceToMove + " " + location + " can attack: ");
+            foreach(var elem in attacksAvailable){
+                Console.WriteLine(elem);
+            }
+        }
+        }catch(Exception e){
+            Console.WriteLine("Piece not found");
+            //Console.WriteLine("" + e.Message);
         }
         Console.WriteLine("  ");
 
         printBoard(side);
-        }
+        
         return this;
     }
 

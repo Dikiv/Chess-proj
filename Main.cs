@@ -99,8 +99,7 @@ void blackTurn(Board board){
             (placeToMove.Item1 < 8 || placeToMove.Item2 < 8) && 
             (pieceToMove.Item1 < 8 || pieceToMove.Item2 < 8) ){
             board.movePiece(pieceToMove,placeToMove,side);
-
-            
+    
         }
 
         if(board.getBoard()[placeToMove.Item1,placeToMove.Item2].GetPiece() != null && 

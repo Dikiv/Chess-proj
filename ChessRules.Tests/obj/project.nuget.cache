@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2kcUP3S+K3A=",
+  "dgSpecHash": "leB/cY6mbjA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\chris\\Desktop\\Chesster\\Chess-proj\\Chess proj.csproj",
+  "projectFilePath": "C:\\Users\\chris\\Desktop\\Chesster\\Chess-proj\\ChessRules.Tests\\ChessRules.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\chris\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
     "C:\\Users\\chris\\.nuget\\packages\\microsoft.codecoverage\\17.8.0\\microsoft.codecoverage.17.8.0.nupkg.sha512",
