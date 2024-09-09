@@ -1,5 +1,5 @@
 
-class Queen : Piece
+public class Queen : Piece
 {
 
     //False = Black

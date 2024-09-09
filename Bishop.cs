@@ -1,5 +1,5 @@
 
-class Bishop : Piece
+public class Bishop : Piece
 {
 
     //False = Black

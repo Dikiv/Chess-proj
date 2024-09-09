@@ -1,7 +1,7 @@
 
 using System.Security.Cryptography.X509Certificates;
 
-class Square{
+public class Square{
     
     //True = white
     //False = Black

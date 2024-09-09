@@ -1,5 +1,5 @@
 
-class Knight : Piece
+public class Knight : Piece
 {
     private Boolean color;
     //tmp num for piece

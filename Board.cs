@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-class Board{
+public class Board{
     private Square[,] positions;
     private int dim;
 
@@ -13,7 +13,7 @@ class Board{
 
         initBoard();
 
-        populateStandard(side);
+        //populateStandard(side);
 
         printBoard(side);
         

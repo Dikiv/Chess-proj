@@ -1,5 +1,5 @@
 
-class Pawn : Piece
+public class Pawn : Piece
 {
     //False = Black
     //True = White

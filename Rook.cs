@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
-class Rook : Piece
+public class Rook : Piece
 {
     //False = Black
     //True = White

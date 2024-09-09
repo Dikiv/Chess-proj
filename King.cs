@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-class King : Piece
+public class King : Piece
 {
     //False = Black
     //True = White
