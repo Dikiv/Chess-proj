@@ -50,7 +50,7 @@ public class Bishop : Piece
             upRight = (upRight.Item1+1,upRight.Item2+1);
         }else{
             var tmp = board.getPieceOnSquare(upRight.Item1,upRight.Item2);
-            if(tmp is not null && tmp.getColor() != this.color){
+            if(tmp is not null && tmp.getColor() != this.color && !attacks.Contains(upRight)){
                 attacks.Add(upRight);
             }
         }
@@ -61,7 +61,7 @@ public class Bishop : Piece
             upLeft = (upLeft.Item1+1,upLeft.Item2-1);
         }else{
             var tmp = board.getPieceOnSquare(upLeft.Item1,upLeft.Item2);
-            if(tmp is not null && tmp.getColor()!= this.color){
+            if(tmp is not null && tmp.getColor()!= this.color && !attacks.Contains(upLeft)){
                 attacks.Add(upLeft);
             }
         }
@@ -71,7 +71,7 @@ public class Bishop : Piece
             downLeft = (downLeft.Item1-1,downLeft.Item2-1);
         }else{
             var tmp = board.getPieceOnSquare(downLeft.Item1,downLeft.Item2);
-            if(tmp is not null && tmp.getColor()!= this.color){
+            if(tmp is not null && tmp.getColor()!= this.color && !attacks.Contains(downLeft)){
                 attacks.Add(downLeft);
             }
         }
@@ -81,12 +81,11 @@ public class Bishop : Piece
             downRight = (downRight.Item1-1,downRight.Item2+1);
         }else{
             var tmp = board.getPieceOnSquare(downRight.Item1,downRight.Item2);
-            if(tmp is not null && tmp.getColor()!= this.color){
+            if(tmp is not null && tmp.getColor()!= this.color && !attacks.Contains(downRight)){
                 attacks.Add(downRight);
             }
         }
 
-        
         /*
         if(board.isSquareTaken(upLeft.Item1,upLeft.Item2)){
                 break;

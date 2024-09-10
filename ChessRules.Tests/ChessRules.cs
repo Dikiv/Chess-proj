@@ -176,7 +176,7 @@ public class ChessRules
                 expectedmoveList.Add((negative,positive));
             }
             
-            if(negative < 0 && positive > 7){
+            if(negative <= 0 && positive >= 7){
                 break;
             }
         }
@@ -207,12 +207,10 @@ public class ChessRules
             negative--;
             positive++;
 
-
             if(positive < 8){
                 expectedmoveList.Add((positive,positive));
             }
                       
-            
             if(negative > -1){
                 expectedmoveList.Add((negative,negative));    
             }
@@ -223,22 +221,50 @@ public class ChessRules
             }
                         
             
-            if(negative < 0 && positive > 7){
+            if(negative <= 0 && positive >= 7){
                 break;
             }
         }
         
-        
         expectedmoveList.Sort();
         expectedmoveList.Remove((3,3));
-
+        
         var actual  = board.getPieceOnSquare(3,3).Move(3,3,board);
         if(actual.Count > 0){
             actual.Sort();
         }
         
         Assert.Equal(expectedmoveList,actual);
+    }
+
+    [Fact]
+    public void BishopAtD4Attacks()
+    {
+        var board = new Board(8,true);
+        var wbishop = new Bishop(true,1);
+        var bpawn = new Pawn(false,1);
         
+        board.getBoard()[3,3].placePiece(wbishop);
+        var expectedAttackList = new List<(int,int)>(){
+            (1,1),
+            (7,7),
+            (1,5)
+        };
+
+        board.getBoard()[1,1].placePiece(bpawn);
+        board.getBoard()[7,7].placePiece(bpawn);
+        board.getBoard()[5,1].placePiece(bpawn);
+        board.getBoard()[1,5].placePiece(bpawn);
+        board.getBoard()[4,2].placePiece(wbishop);
+        
+        expectedAttackList.Sort();
+        
+        var actual  = board.getPieceOnSquare(3,3).Attack(3,3,board);
+        if(actual.Count > 0){
+            actual.Sort();
+        }
+        
+        Assert.Equal(expectedAttackList,actual);
     }
 
 

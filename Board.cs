@@ -14,7 +14,7 @@ public class Board{
         initBoard();
 
         //populateStandard(side);
-        positions[4,4].placePiece(new Bishop(true,3));
+        //positions[4,4].placePiece(new Bishop(true,3));
 
         printBoard(side);
         
