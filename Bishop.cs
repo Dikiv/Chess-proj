@@ -22,7 +22,6 @@ public class Bishop : Piece
             this.piece = "♗";
         }
         this.attacks = new List<(int,int)>();
-
     }
     public override List<(int, int)> Attack(int row, int col, Board board)
     {
@@ -45,36 +44,41 @@ public class Bishop : Piece
         attacks.Clear();
 
         while(true){
-        if(!board.isSquareTaken(upLeft.Item1,upRight.Item2)){
+        
+        if(!board.isSquareTaken(upRight.Item1,upRight.Item2)){
+            moveList.Add(upRight);
+            upRight = (upRight.Item1+1,upRight.Item2+1);
+        }else{
+            var tmp = board.getPieceOnSquare(upRight.Item1,upRight.Item2);
+            if(tmp is not null && tmp.getColor() != this.color){
+                attacks.Add(upRight);
+            }
+        }
+        
+        
+        if(!board.isSquareTaken(upLeft.Item1,upLeft.Item2)){
             moveList.Add(upLeft);
-            upLeft = (upLeft.Item1++,upLeft.Item2--);
+            upLeft = (upLeft.Item1+1,upLeft.Item2-1);
         }else{
             var tmp = board.getPieceOnSquare(upLeft.Item1,upLeft.Item2);
-            if(tmp is not null && tmp.getColor() != this.color){
+            if(tmp is not null && tmp.getColor()!= this.color){
                 attacks.Add(upLeft);
             }
         }
-        if(!board.isSquareTaken(upRight.Item1,upLeft.Item2)){
-            moveList.Add(upRight);
-            upRight = (upRight.Item1++,upRight.Item2++);
-        }else{
-            var tmp = board.getPieceOnSquare(downRight.Item1,downRight.Item2);
-            if(tmp is not null && tmp.getColor()!= this.color){
-                attacks.Add(downRight);
-            }
-        }
+
         if(!board.isSquareTaken(downLeft.Item1,downLeft.Item2)){
             moveList.Add(downLeft);
-            downLeft = (downLeft.Item1--,downLeft.Item2--);
+            downLeft = (downLeft.Item1-1,downLeft.Item2-1);
         }else{
-            var tmp = board.getPieceOnSquare(downRight.Item1,downRight.Item2);
+            var tmp = board.getPieceOnSquare(downLeft.Item1,downLeft.Item2);
             if(tmp is not null && tmp.getColor()!= this.color){
-                attacks.Add(downRight);
+                attacks.Add(downLeft);
             }
         }
+        
         if(!board.isSquareTaken(downRight.Item1 ,downRight.Item2)){
             moveList.Add(downRight);
-            downRight = (downRight.Item1--,downRight.Item2++);
+            downRight = (downRight.Item1-1,downRight.Item2+1);
         }else{
             var tmp = board.getPieceOnSquare(downRight.Item1,downRight.Item2);
             if(tmp is not null && tmp.getColor()!= this.color){
@@ -82,7 +86,15 @@ public class Bishop : Piece
             }
         }
 
-
+        
+        /*
+        if(board.isSquareTaken(upLeft.Item1,upLeft.Item2)){
+                break;
+            }
+        }
+        */
+        
+            
         if(board.isSquareTaken(upLeft.Item1 ,upLeft.Item2) && 
             board.isSquareTaken(upRight.Item1 ,upRight.Item2) &&
             board.isSquareTaken(downRight.Item1 ,downRight.Item2) &&
@@ -90,6 +102,7 @@ public class Bishop : Piece
                 break;
             }
         }
+        
 
         return moveList;
     }

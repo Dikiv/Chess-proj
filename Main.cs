@@ -2,7 +2,7 @@
 using System.Data;
 using System.Text.RegularExpressions;
 
-var x = new Board(8,true);
+var x = new Board(8,false);
 //x.movePiece((1,0),(2,0));
 //printallmoves(x);
 //x.printBoard(false);

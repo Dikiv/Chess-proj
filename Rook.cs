@@ -34,8 +34,6 @@ public class Rook : Piece
         return this.attacks;
     }
 
-
-
     public override bool getColor()
     {
         return this.color;
@@ -46,15 +44,18 @@ public class Rook : Piece
     {
         var moveList = new List<(int,int)>();
         this.attacks.Clear();
-        var left = col--;
-        var right = col++;
-        var up = row++;
-        var down = row--;
+        var left = col-1;
+        var right = col+1;
+        var up = row+1;
+        var down = row-1;
 
         while(true){
+
             if(!board.isSquareTaken(row,left)){
                 moveList.Add((row,left));
                 left--;
+                Console.WriteLine("l");
+                Console.WriteLine(left);
             }else{
                 var tmp = board.getPieceOnSquare(row, left);
 
@@ -67,6 +68,8 @@ public class Rook : Piece
             if(!board.isSquareTaken(row,right)){
                 moveList.Add((row,right));
                 right++;
+                                Console.WriteLine("r");
+                Console.WriteLine(right);
             }else{
                 var tmp = board.getPieceOnSquare(row, right);
                 if(tmp is not null && tmp.getColor() != this.color)
@@ -78,6 +81,8 @@ public class Rook : Piece
             if(!board.isSquareTaken(up,col)){
                 moveList.Add((up,col));
                 up++;
+                                Console.WriteLine("u");
+                Console.WriteLine(up);
             }else{
                 var tmp = board.getPieceOnSquare(up, col);
 
@@ -90,6 +95,9 @@ public class Rook : Piece
             if(!board.isSquareTaken(down,col)){
                 moveList.Add((down,col));
                 down--;
+                Console.WriteLine("d");
+                
+                Console.WriteLine(down);
             }else{
                 var tmp = board.getPieceOnSquare(down, col);
                 
@@ -97,6 +105,10 @@ public class Rook : Piece
                 {
                     this.attacks.Add((down,col));
                 }
+            }
+            foreach(var elem in moveList){
+            Console.WriteLine(elem);
+        
             }
 
             if(board.isSquareTaken(down,col) && 
@@ -107,7 +119,7 @@ public class Rook : Piece
             }
 
         }
-
+        
         return moveList;
     }
 

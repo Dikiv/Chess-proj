@@ -14,6 +14,7 @@ public class Board{
         initBoard();
 
         //populateStandard(side);
+        positions[4,4].placePiece(new Bishop(true,3));
 
         printBoard(side);
         
@@ -58,17 +59,20 @@ public class Board{
     }
 
     public bool isSquareTaken(int row, int col){
-
-        if( 
-            row < 0 ||
-            col < 0 ||
-            row > dim-1 || 
-            col > dim -1 ||
-            positions[row,col].GetPiece() is not null ){
+        
+        try{
+            if(positions[row,col].GetPiece() is not null ){
             return true;
+            }
+            
+            return false;
+                       
+        }catch(Exception e){
+            //Console.WriteLine(e.Message);
+            
         }
-        return false;
-    }
+        return true;
+        }
 
     public Piece? getPieceOnSquare(int row, int col){
         if( row > 0 &&
