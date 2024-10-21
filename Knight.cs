@@ -100,7 +100,7 @@ public class Knight : Piece
             moveList.Add((row-2,col-1));
         }
         if(!downRight){
-            moveList.Add((row-2,col+2));
+            moveList.Add((row-2,col+1));
         }
 
         return moveList;

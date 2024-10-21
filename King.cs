@@ -88,6 +88,26 @@ public class King : Piece
         var upLeft = (row+1,col-1);
         var downLeft = (row-1,col-1);
 
+        if(row == 7){
+             downLeft = (row-1,col-1);
+             down = (row-1, col);
+             downRight = (row-1,col+1); 
+        }
+        if(col == 7){
+             downLeft = (row-1,col-1);
+             upLeft = (row+1,col-1);
+             left = (row,col-1);
+        }
+        
+        if(col == 0){
+             upRight = (row+1,col+1);
+             up = (row+1,col);
+        }
+        if(row == 0){
+             right = (row,col+1);
+             upRight = (row+1,col+1);
+        }
+
         if(!board.isSquareTaken(left.Item1, left.Item2)){
             moveList.Add(left);
         }

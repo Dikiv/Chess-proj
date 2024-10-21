@@ -15,7 +15,15 @@ public class Board{
 
         //populateStandard(side);
         //positions[4,4].placePiece(new Bishop(true,3));
-
+        var bpawn = new Pawn(false,1);
+        var wbishop = new Bishop(true,1);
+        /*
+        positions[1,1].placePiece(bpawn);
+        positions[7,7].placePiece(bpawn);
+        positions[1,5].placePiece(bpawn);
+        positions[5,1].placePiece(bpawn);
+        positions[3,3].placePiece(wbishop);
+        */
         printBoard(side);
         
     }

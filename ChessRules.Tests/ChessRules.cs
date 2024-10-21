@@ -247,15 +247,15 @@ public class ChessRules
         board.getBoard()[3,3].placePiece(wbishop);
         var expectedAttackList = new List<(int,int)>(){
             (1,1),
-            (7,7),
+            (4,4),
+            (5,1),
             (1,5)
         };
-
+        
         board.getBoard()[1,1].placePiece(bpawn);
-        board.getBoard()[7,7].placePiece(bpawn);
+        board.getBoard()[4,4].placePiece(bpawn);
         board.getBoard()[5,1].placePiece(bpawn);
         board.getBoard()[1,5].placePiece(bpawn);
-        board.getBoard()[4,2].placePiece(wbishop);
         
         expectedAttackList.Sort();
         
@@ -265,6 +265,103 @@ public class ChessRules
         }
         
         Assert.Equal(expectedAttackList,actual);
+    }
+
+    [Fact]
+    public void BishopAtD4DoesNotAttackAlliedPiece()
+    {
+        var board = new Board(8,true);
+        var wbishop = new Bishop(true,1);
+        var wbishop1 = new Bishop(true,1);
+        var bpawn = new Pawn(false,1);
+        
+        board.getBoard()[3,3].placePiece(wbishop);
+        
+        board.getBoard()[5,5].placePiece(bpawn);
+        board.getBoard()[4,4].placePiece(wbishop1);
+
+        var actual  = board.getPieceOnSquare(3,3).Attack(3,3,board);
+                
+        Assert.Empty(actual);
+    }
+
+    [Fact]
+    public void KnightMovePattern()
+    {
+        var board = new Board(8,true);
+        var wknight = new Knight(true,1);
+        var wbishop = new Bishop(true,1);
+        
+        board.getBoard()[3,3].placePiece(wknight);
+        board.getBoard()[5,2].placePiece(wbishop);
+        board.getBoard()[4,5].placePiece(wbishop);
+
+        var expectedmoveList = new List<(int,int)>(){
+            (1,4),
+            (1,2),
+            (2,1),
+            (2,5),
+            (5,4),
+            (4,1)
+        };
+
+        var actual  = board.getPieceOnSquare(3,3).Move(3,3,board);
+
+        expectedmoveList.Sort();
+        actual.Sort();    
+                
+        Assert.Equal(expectedmoveList,actual);
+    }
+
+    [Fact]
+    public void KnightD4Attacks2()
+    {
+        var board = new Board(8,true);
+        var wknight = new Knight(true,1);
+        var wbishop = new Bishop(true,1);
+        var bpawn =  new Pawn(false, 1);
+        
+        board.getBoard()[3,3].placePiece(wknight);
+        board.getBoard()[5,2].placePiece(wbishop);
+        board.getBoard()[4,5].placePiece(wbishop);
+        board.getBoard()[1,4].placePiece(bpawn);
+        board.getBoard()[2,5].placePiece(bpawn);
+        
+        var expectedAttackList = new List<(int,int)>(){
+            (1,4),
+            (2,5)
+        };
+
+        var actual  = board.getPieceOnSquare(3,3).Attack(3,3,board);
+
+        expectedAttackList.Sort();
+        actual.Sort();    
+                
+        Assert.Equal(expectedAttackList,actual);
+    }
+
+    [Fact]
+    public void KingMovesA1()
+    {
+        var board = new Board(8,true);
+        var wking = new King(true,1);
+        
+        
+        board.getBoard()[0,0].placePiece(wking);
+       
+        
+        var expectedMovesList = new List<(int,int)>(){
+            (1,1),
+            (1,0),
+            (0,1)
+        };
+
+        var actual = board.getPieceOnSquare(0,0).Move(0,0,board);
+
+        expectedMovesList.Sort();
+        actual.Sort();    
+                
+        Assert.Equal(expectedMovesList,actual);
     }
 
 
