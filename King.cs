@@ -88,52 +88,40 @@ public class King : Piece
         var upLeft = (row+1,col-1);
         var downLeft = (row-1,col-1);
 
-        if(row == 7){
-             downLeft = (row-1,col-1);
-             down = (row-1, col);
-             downRight = (row-1,col+1); 
+        if(col > 0 && !board.isSquareTaken(left.Item1, left.Item2)){
+                moveList.Add(left);
         }
-        if(col == 7){
-             downLeft = (row-1,col-1);
-             upLeft = (row+1,col-1);
-             left = (row,col-1);
+        if(col < 7 && !board.isSquareTaken(right.Item1, right.Item2)){
+                moveList.Add(right);
         }
+        if(row > 0 && !board.isSquareTaken(down.Item1, down.Item2)){
+                moveList.Add(down);   
+        }
+        if(row < 7 && !board.isSquareTaken(up.Item1, up.Item2)){
+                moveList.Add(up);
+        }
+        if(col < 7 && row < 7 && !board.isSquareTaken(upRight.Item1, upRight.Item2)){
+                moveList.Add(upRight);  
+        }
+        if(col > 0 && row > 0 && !board.isSquareTaken(downLeft.Item1, downLeft.Item2)){
+                moveList.Add(downLeft);
+        }
+        if(col < 7 && row > 0 && !board.isSquareTaken(downRight.Item1, downRight.Item2)){
+                moveList.Add(downRight);
+        }
+        if(col > 0 && row < 7 && !board.isSquareTaken(upLeft.Item1, upLeft.Item2)){
+                moveList.Add(upLeft);
+        }
+
+        var attackedSquares = getAttackedSquares(board);
         
-        if(col == 0){
-             upRight = (row+1,col+1);
-             up = (row+1,col);
-        }
-        if(row == 0){
-             right = (row,col+1);
-             upRight = (row+1,col+1);
+        foreach(var attacked in attackedSquares){
+            if(moveList.Contains(attacked)){
+                moveList.Remove(attacked);
+            }
         }
 
-        if(!board.isSquareTaken(left.Item1, left.Item2)){
-            moveList.Add(left);
-        }
-        if(!board.isSquareTaken(right.Item1, right.Item2)){
-            moveList.Add(right);
-        }
-        if(!board.isSquareTaken(up.Item1, up.Item2)){
-            moveList.Add(up);
-        }
-        if(!board.isSquareTaken(down.Item1, down.Item2)){
-            moveList.Add(down);
-        }
-        if(!board.isSquareTaken(upRight.Item1, upRight.Item2)){
-            moveList.Add(upRight);
-        }
-        if(!board.isSquareTaken(upLeft.Item1, upLeft.Item2)){
-            moveList.Add(upLeft);
-        }
-        if(!board.isSquareTaken(downLeft.Item1, downLeft.Item2)){
-            moveList.Add(downLeft);
-        }
-        if(!board.isSquareTaken(downRight.Item1, downRight.Item2)){
-            moveList.Add(downRight);
-        }
-
-        return moveList;
+        return moveList; 
     }
 
     public (int,int) Castle(int row, int col, Board board, Rook rook){
@@ -157,5 +145,26 @@ public class King : Piece
 
     public void hasMoved(){
         this.moved = true;
+    }
+
+    public HashSet<(int,int)> getAttackedSquares(Board board){
+        var attackedPositions = new HashSet<(int,int)>(); 
+
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                var piece = board.getPieceOnSquare(i, j);
+                if(piece is not null && piece.getColor() != this.color){
+                    Console.WriteLine("attackSquares");
+                    foreach(var x in piece.Move(i,j,board)){
+                        attackedPositions.Add(x);
+                    }
+                    
+                }
+
+            }
+        }
+
+
+        return attackedPositions; 
     }
 }

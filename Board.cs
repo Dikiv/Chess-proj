@@ -15,10 +15,11 @@ public class Board{
 
         //populateStandard(side);
         //positions[4,4].placePiece(new Bishop(true,3));
-        var bpawn = new Pawn(false,1);
-        var wbishop = new Bishop(true,1);
+        var bpawn = new King(false,1);
+        var brook = new Rook(true,1);
+        
+        
         /*
-        positions[1,1].placePiece(bpawn);
         positions[7,7].placePiece(bpawn);
         positions[1,5].placePiece(bpawn);
         positions[5,1].placePiece(bpawn);
@@ -83,10 +84,10 @@ public class Board{
         }
 
     public Piece? getPieceOnSquare(int row, int col){
-        if( row > 0 &&
-            col > 0 &&
-            row < dim-1 && 
-            col < dim -1 ){
+        if( row >= 0 &&
+            col >= 0 &&
+            row <= dim-1 && 
+            col <= dim -1 ){
         return positions[row,col].GetPiece();
         }
         return null;

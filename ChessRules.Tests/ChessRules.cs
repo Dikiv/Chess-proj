@@ -341,6 +341,35 @@ public class ChessRules
     }
 
     [Fact]
+    public void KingMovesB2()
+    {
+        var board = new Board(8,true);
+        var wking = new King(true,1);
+        
+        
+        board.getBoard()[1,1].placePiece(wking);
+       
+        
+        var expectedMovesList = new List<(int,int)>(){
+            (2,0),
+            (1,0),
+            (0,1),
+            (0,0),
+            (0,2),
+            (2,2),
+            (2,1),
+            (1,2)
+        };
+
+        var actual = board.getPieceOnSquare(1,1).Move(1,1,board);
+
+        expectedMovesList.Sort();
+        actual.Sort();    
+                
+        Assert.Equal(expectedMovesList,actual);
+    }
+    
+    [Fact]
     public void KingMovesA1()
     {
         var board = new Board(8,true);
@@ -349,20 +378,61 @@ public class ChessRules
         
         board.getBoard()[0,0].placePiece(wking);
        
-        
         var expectedMovesList = new List<(int,int)>(){
             (1,1),
             (1,0),
             (0,1)
         };
 
-        var actual = board.getPieceOnSquare(0,0).Move(0,0,board);
+        var actual = board.getPieceOnSquare(0, 0).Move(0,0, board);
 
         expectedMovesList.Sort();
         actual.Sort();    
                 
         Assert.Equal(expectedMovesList,actual);
     }
+    [Fact]
+    public void PawnA1()
+    {
+        var board = new Board(8,true);
+        var wpawn = new Pawn(true,1);
+        
+        board.getBoard()[0,0].placePiece(wpawn);
+       
+        var expectedMovesList = new List<(int,int)>(){
+            (1,0)
+        };
+
+        var actual = board.getPieceOnSquare(0, 0).Move(0,0,board);
+
+        expectedMovesList.Sort();
+        actual.Sort();    
+                
+        Assert.Equal(expectedMovesList,actual);
+    }
+
+    [Fact]
+    public void KingA1OnlyLegalMoveIsA2()
+    {
+        var board = new Board(8,true);
+        var wking = new King(true,1);
+        var brook = new Rook(false,1);
+
+        board.getBoard()[0,0].placePiece(wking);
+        board.getBoard()[7,1].placePiece(brook);
+
+        var expectedMovesList = new List<(int,int)>(){
+            (1,0)
+        };
+
+        var actual = board.getPieceOnSquare(0, 0).Move(0,0,board);
+
+        expectedMovesList.Sort();
+        actual.Sort();    
+                
+        Assert.Equal(expectedMovesList,actual);
+    }
+    
 
 
 
