@@ -12,6 +12,7 @@ public class Queen : Piece
 
     //List of current attack targets
     private List<(int,int)> attacks;
+    private bool moved;
 
     public Queen(Boolean color,int num){
         this.color = color;
@@ -155,5 +156,15 @@ public class Queen : Piece
     public override string Show()
     {
         return this.piece;
+    }
+
+        public override bool getHasMoved()
+    {
+        return this.moved;
+    }
+
+    public override void setMoved()
+    {
+        this.moved = true;
     }
 }

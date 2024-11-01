@@ -432,6 +432,108 @@ public class ChessRules
                 
         Assert.Equal(expectedMovesList,actual);
     }
+
+    [Fact]
+    public void KingCastlingRight()
+    {
+        //Start
+        var board = new Board(8,true);
+        var wking = new King(true,1);
+        var wrook = new Rook(true,1);
+        board.getBoard()[0,4].placePiece(wking);
+        board.getBoard()[0,7].placePiece(wrook);
+
+        //Expected
+        var expectedRookpos = (0,5);
+        var expectedKingpos = (0,6);
+
+
+        //Execute    
+        var actualKing = board.getPieceOnSquare(0,4) as King;
+        var castleKingPos = actualKing?.CastleMoves(0,4,board).First();
+
+        var actualRook = board.getPieceOnSquare(0,7) as Rook;
+        var castleRookPos = actualRook?.CastleMove(0,7,board);
+
+        //Assert
+        Assert.Equal(expectedKingpos,castleKingPos);
+        Assert.Equal(expectedRookpos,castleRookPos);
+    }
+
+    [Fact]
+    public void KingCastlingLeft()
+    {
+        //Start
+        var board = new Board(8,true);
+        var wking = new King(true,1);
+        var wrook = new Rook(true,1);
+        board.getBoard()[0,4].placePiece(wking);
+        board.getBoard()[0,0].placePiece(wrook);
+
+        //Expected
+        var expectedRookpos = (0,3);
+        var expectedKingpos = (0,2);
+
+
+        //Execute    
+        var actualKing = board.getPieceOnSquare(0,4) as King;
+        var castleKingPos = actualKing?.CastleMoves(0,4,board).First();
+
+        var actualRook = board.getPieceOnSquare(0,0) as Rook;
+        var castleRookPos = actualRook?.CastleMove(0,0,board);
+
+        //Assert
+        Assert.Equal(expectedKingpos,castleKingPos);
+        Assert.Equal(expectedRookpos,castleRookPos);
+    }
+
+        [Fact]
+    public void KingCastlingLeftisBlocked()
+    {
+        //Start
+        var board = new Board(8,true);
+        var wking = new King(true,1);
+        var wrook = new Rook(true,1);
+        var wknight = new Knight(true,1);
+
+        board.getBoard()[0,4].placePiece(wking);
+        board.getBoard()[0,0].placePiece(wrook);
+        board.getBoard()[0,1].placePiece(wknight);
+
+
+        //Execute    
+        var actualKing = board.getPieceOnSquare(0,4) as King;
+        var castleKingPos = actualKing?.CastleMoves(0,4,board);
+
+        var actualRook = board.getPieceOnSquare(0,0) as Rook;
+        var castleRookPos = actualRook?.CastleMove(0,0,board);
+
+        //Assert
+        Assert.Empty(castleKingPos);
+        Assert.Null(castleRookPos);
+    }
+
+
+    [Fact]
+    public void KnightA1Moves()
+    {
+        var board = new Board(8,true);
+        var bknight = new Knight(false,1);
+
+        board.getBoard()[0,0].placePiece(bknight);
+
+        var expectedMovesList = new List<(int,int)>(){
+            (1,2),
+            (2,1)
+        };
+
+        var actual = board.getPieceOnSquare(0, 0).Move(0,0,board);
+
+        expectedMovesList.Sort();
+        actual.Sort();    
+                
+        Assert.Equal(expectedMovesList,actual);
+    }
     
 
 

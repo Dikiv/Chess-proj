@@ -16,6 +16,9 @@ public class Rook : Piece
     //List of current attack targets
     private List<(int,int)> attacks;
 
+    //bool for checking if rook has moved in case of castling
+    private bool moved;
+
     public Rook(bool color, int num){
         this.color = color;
         this.num = num;
@@ -54,8 +57,6 @@ public class Rook : Piece
             if(!board.isSquareTaken(row,left)){
                 moveList.Add((row,left));
                 left--;
-                Console.WriteLine("l");
-                Console.WriteLine(left);
             }else{
                 var tmp = board.getPieceOnSquare(row, left);
 
@@ -68,8 +69,6 @@ public class Rook : Piece
             if(!board.isSquareTaken(row,right)){
                 moveList.Add((row,right));
                 right++;
-                                Console.WriteLine("r");
-                Console.WriteLine(right);
             }else{
                 var tmp = board.getPieceOnSquare(row, right);
                 if(tmp is not null && tmp.getColor() != this.color)
@@ -81,8 +80,7 @@ public class Rook : Piece
             if(!board.isSquareTaken(up,col)){
                 moveList.Add((up,col));
                 up++;
-                                Console.WriteLine("u");
-                Console.WriteLine(up);
+            
             }else{
                 var tmp = board.getPieceOnSquare(up, col);
 
@@ -95,9 +93,6 @@ public class Rook : Piece
             if(!board.isSquareTaken(down,col)){
                 moveList.Add((down,col));
                 down--;
-                Console.WriteLine("d");
-                
-                Console.WriteLine(down);
             }else{
                 var tmp = board.getPieceOnSquare(down, col);
                 
@@ -106,10 +101,7 @@ public class Rook : Piece
                     this.attacks.Add((down,col));
                 }
             }
-            foreach(var elem in moveList){
-            Console.WriteLine(elem);
-        
-            }
+            
 
             if(board.isSquareTaken(down,col) && 
                 board.isSquareTaken(up,col) && 
@@ -122,9 +114,34 @@ public class Rook : Piece
         
         return moveList;
     }
+    public (int,int) CastleMove(int row, int col, Board board){
+        
+        if(col == 0){
+            if(board.getPieceOnSquare(row,col+4) is King){
+                return (row,col+3);
+            }
+            return (row,col+2);
+        }
+
+        if(board.getPieceOnSquare(row,col-4) is King){
+            return (row,col-3);
+        }
+    
+        return (row, col-2);
+    }
 
     public override string Show()
     {
         return this.piece;
+    }
+
+        public override bool getHasMoved()
+    {
+        return this.moved;
+    }
+
+    public override void setMoved()
+    {
+        this.moved = true;
     }
 }

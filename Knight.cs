@@ -6,6 +6,7 @@ public class Knight : Piece
     private int num;
     //char for piece
     private string piece;
+    private bool moved;
 
     public Knight(Boolean color, int num){
         this.color = color;
@@ -65,6 +66,11 @@ public class Knight : Piece
 
     }
 
+        public override bool getHasMoved()
+    {
+        return this.moved;
+    }
+
     public override List<(int, int)> Move(int row, int col, Board board)
     {
         var moveList = new List<(int,int)>();
@@ -110,5 +116,10 @@ public class Knight : Piece
     public override string Show()
     {
         return this.piece;
+    }
+    
+    public override void setMoved()
+    {
+        this.moved = true;
     }
 }

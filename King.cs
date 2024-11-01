@@ -12,7 +12,9 @@ public class King : Piece
     //char for piece
     private string piece;
 
+    //bool for checking if king has moved in case of castling
     private bool moved = false;
+
 
     public King(bool color, int num){
         this.color = color;
@@ -113,6 +115,8 @@ public class King : Piece
                 moveList.Add(upLeft);
         }
 
+        
+
         var attackedSquares = getAttackedSquares(board);
         
         foreach(var attacked in attackedSquares){
@@ -124,13 +128,35 @@ public class King : Piece
         return moveList; 
     }
 
-    public (int,int) Castle(int row, int col, Board board, Rook rook){
-        //tmp
-        if(!moved){
+    public List<(int,int)> CastleMoves(int row, int col, Board board){
 
+        var CastlesList = new List<(int,int)>();
+        
+        if(!moved){
+            //check empty spaces between king + rook
+            for(int i = 1; i < col ; i++){
+                if(board.isSquareTaken(row,i)){
+                    break;
+                }else if(i == col-1){
+                    var rok = board.getPieceOnSquare(row,0);
+                    if(rok is Rook && !rok.getHasMoved()){
+                        CastlesList.Add((row,col-2));
+                    }
+                }
+            }
+            for(int i = col+1; i < 7 ; i++){
+                if(board.isSquareTaken(row,i)){
+                    break;
+                }else if(i == 6){
+                    var rok = board.getPieceOnSquare(row,7);
+                    if(rok is Rook && !rok.getHasMoved()){
+                        CastlesList.Add((row,col+2));
+                    }
+                }
+            }
         }
 
-        return (0,0);
+        return CastlesList;
     }
 
     public override string Show()
@@ -166,5 +192,15 @@ public class King : Piece
 
 
         return attackedPositions; 
+    }
+
+    public override bool getHasMoved()
+    {
+        return this.moved;
+    }
+
+    public override void setMoved()
+    {
+        this.moved = true;
     }
 }

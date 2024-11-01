@@ -5513,11 +5513,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\chris\\Desktop\\Chesster\\Chess-proj\\Chess proj.csproj",
+      "projectUniqueName": "c:\\Users\\chris\\Desktop\\Chesster\\Chess-proj\\Chess proj.csproj",
       "projectName": "Chess proj",
-      "projectPath": "C:\\Users\\chris\\Desktop\\Chesster\\Chess-proj\\Chess proj.csproj",
+      "projectPath": "c:\\Users\\chris\\Desktop\\Chesster\\Chess-proj\\Chess proj.csproj",
       "packagesPath": "C:\\Users\\chris\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\chris\\Desktop\\Chesster\\Chess-proj\\obj\\",
+      "outputPath": "c:\\Users\\chris\\Desktop\\Chesster\\Chess-proj\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\chris\\AppData\\Roaming\\NuGet\\NuGet.Config"

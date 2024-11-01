@@ -8,6 +8,7 @@ public class Pawn : Piece
     private int num;
     //char for piece
     private string piece;
+    private bool moved;
 
     public Pawn(bool color, int num){
         this.color = color;
@@ -88,5 +89,14 @@ public class Pawn : Piece
     public override bool getColor()
     {
         return this.color;
+    }
+
+    public override bool getHasMoved()
+    {
+        return this.moved;
+    }
+    public override void setMoved()
+    {
+        this.moved = true;
     }
 }
