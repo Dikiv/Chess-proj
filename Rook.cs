@@ -117,13 +117,16 @@ public class Rook : Piece
     public (int,int) CastleMove(int row, int col, Board board){
         
         if(col == 0){
-            if(board.getPieceOnSquare(row,col+4) is King){
+            var king0 = board.getPieceOnSquare(row,col+4);
+            if(king0 is King && king0.getColor() == this.color){
                 return (row,col+3);
             }
             return (row,col+2);
         }
 
-        if(board.getPieceOnSquare(row,col-4) is King){
+            
+        var king1 = board.getPieceOnSquare(row,col-4);
+        if(king1 is King && king1.getColor() == this.color){
             return (row,col-3);
         }
     

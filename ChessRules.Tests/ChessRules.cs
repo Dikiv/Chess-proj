@@ -1,24 +1,79 @@
 using System;
 using Xunit;
+using NUnit.Framework;
 using System.Collections.Generic;
+using System.Text;
+using Moq;
+using System.IO;
+using System.Security.Permissions;
+using ChessApp;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using ChessApp.Chess;
 
-namespace ChessRules.Tests;
 
-public class ChessRules
+namespace ChessRules.Tests{
+
+public class ChessRules 
 {
+    [TestFixture]
+    public class consoleTests
+    {   
+        StringBuilder _ConsoleOutput;
+        Mock<TextReader> _ConsoleInput;
+
+        [SetUp]            
+        public void Setup(){
+            _ConsoleOutput = new StringBuilder();
+            var consoleOutputWriter = new StringWriter(_ConsoleOutput);
+            _ConsoleInput = new Mock<TextReader>();
+            Console.SetOut(consoleOutputWriter);
+            Console.SetIn(_ConsoleInput.Object);
+        }
+
+        private string[] RunMainAndGetConsoleOutput(){
+            ChessApp.Chess.Main(default);
+            return _ConsoleOutput.ToString().Split("\r\n");
+        }
+
+        private MockSequence SetupUserResponse(params string[] userResponse){
+            var sequence = new MockSequence();
+            foreach (var response in userResponse){
+                _ConsoleInput.InSequence(sequence).Setup(x => x.ReadLine()).Returns(response);
+            }
+            return sequence;
+        }
+        
+        [Test]
+        public void TestTwoMovesA2toA3ThenA7ToA5(){
+            SetupUserResponse("a3","a4");
+            var expectedOutput = "x";
+            
+            var outputLines = RunMainAndGetConsoleOutput();
+
+            //Chess.Main(default);
+
+            NUnit.Framework.Assert.Equals(expectedOutput, outputLines[0]);
+        }
+    }
+
+
+    public class unitTests
+    {   
+
+
     [Fact]
     public void BlackPawnCreatedAtG7()
     {
-        var board = new Board(8,false);
+        var board = new Board(8,false,false);
         var pawn = new Pawn(false,1);
         board.getBoard()[6,6].placePiece(pawn);
-        Assert.Equal(pawn,board.getPieceOnSquare(6,6));
+        Xunit.Assert.Equal(pawn,board.getPieceOnSquare(6,6));
     }
 
     [Fact]
     public void BlackPawnAtG7CanMoveToG6AndG5()
     {
-        var board = new Board(8,false);
+        var board = new Board(8,false,false);
         var pawn = new Pawn(false,1);
         board.getBoard()[6,6].placePiece(pawn);
         var expectedposList = new List<(int, int)>
@@ -27,13 +82,13 @@ public class ChessRules
             (4, 6)
         };
         
-        Assert.Equal(expectedposList,board.getPieceOnSquare(6,6).Move(6,6,board));
+        Xunit.Assert.Equal(expectedposList,board.getPieceOnSquare(6,6).Move(6,6,board));
     }
 
     [Fact]
     public void BlackPawnAtG6CanOnlyMoveToG5()
     {
-        var board = new Board(8,false);
+        var board = new Board(8,false,false);
         var pawn = new Pawn(false,1);
         board.getBoard()[5,6].placePiece(pawn);
         var expectedposList = new List<(int, int)>
@@ -41,13 +96,13 @@ public class ChessRules
             (4, 6)
         };
         
-        Assert.Equal(expectedposList,board.getPieceOnSquare(5,6).Move(5,6,board));
+        Xunit.Assert.Equal(expectedposList,board.getPieceOnSquare(5,6).Move(5,6,board));
     }
 
     [Fact]
     public void WhitePawnAtG3CanOnlyMoveToG4()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var pawn = new Pawn(true,1);
         board.getBoard()[2,6].placePiece(pawn);
         var expectedposList = new List<(int, int)>
@@ -55,13 +110,13 @@ public class ChessRules
             (3, 6)
         };
         
-        Assert.Equal(expectedposList,board.getPieceOnSquare(2,6).Move(2,6,board));
+        Xunit.Assert.Equal(expectedposList,board.getPieceOnSquare(2,6).Move(2,6,board));
     }
 
     [Fact]
     public void WhitePawnAtG2CanMoveToG3AndG4()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var pawn = new Pawn(true,1);
         board.getBoard()[1,6].placePiece(pawn);
         var expectedposList = new List<(int, int)>
@@ -70,13 +125,13 @@ public class ChessRules
             (3, 6)
         };
                 
-        Assert.Equal(expectedposList,board.getPieceOnSquare(1,6).Move(1,6,board));
+        Xunit.Assert.Equal(expectedposList,board.getPieceOnSquare(1,6).Move(1,6,board));
     }
 
     [Fact]
     public void WhitePawnAtG2CanAttackBlackPieceAtF3()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wpawn = new Pawn(true,1);
         var bpawn = new Pawn(false,1);
         board.getBoard()[2,5].placePiece(bpawn);
@@ -87,14 +142,14 @@ public class ChessRules
         };
         
                 
-        Assert.Equal(expectedattackList,board.getPieceOnSquare(1,6).Attack(1,6,board));
+        Xunit.Assert.Equal(expectedattackList,board.getPieceOnSquare(1,6).Attack(1,6,board));
     }
 
 
     [Fact]
     public void RookAtD4Moves()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wrook = new Rook(true,1);
         board.getBoard()[3,3].placePiece(wrook);
         var expectedmoveList = new List<(int,int)>();
@@ -112,12 +167,12 @@ public class ChessRules
             actual.Sort();
         }
         
-        Assert.Equal(expectedmoveList,actual);
+        Xunit.Assert.Equal(expectedmoveList,actual);
     }
 
     public void WhiteRookAtD4AttacksD1andA4andD8()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wrook = new Rook(true,1);
         board.getBoard()[3,3].placePiece(wrook);
         var expectedattackList = new List<(int, int)>
@@ -145,13 +200,13 @@ public class ChessRules
             actual.Sort();
         }
         
-        Assert.Equal(expectedattackList,actual);
+        Xunit.Assert.Equal(expectedattackList,actual);
     }
 
     [Fact]
     public void BishopAtE5Moves()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wbishop = new Bishop(true,1);
         board.getBoard()[4,4].placePiece(wbishop);
         var expectedmoveList = new List<(int,int)>();
@@ -189,13 +244,13 @@ public class ChessRules
             actual.Sort();
         }
         
-        Assert.Equal(expectedmoveList,actual);
+        Xunit.Assert.Equal(expectedmoveList,actual);
     }
 
     [Fact]
     public void BishopAtD4Moves()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wbishop = new Bishop(true,1);
         board.getBoard()[3,3].placePiece(wbishop);
         var expectedmoveList = new List<(int,int)>();
@@ -234,13 +289,13 @@ public class ChessRules
             actual.Sort();
         }
         
-        Assert.Equal(expectedmoveList,actual);
+        Xunit.Assert.Equal(expectedmoveList,actual);
     }
 
     [Fact]
     public void BishopAtD4Attacks()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wbishop = new Bishop(true,1);
         var bpawn = new Pawn(false,1);
         
@@ -264,13 +319,13 @@ public class ChessRules
             actual.Sort();
         }
         
-        Assert.Equal(expectedAttackList,actual);
+        Xunit.Assert.Equal(expectedAttackList,actual);
     }
 
     [Fact]
     public void BishopAtD4DoesNotAttackAlliedPiece()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wbishop = new Bishop(true,1);
         var wbishop1 = new Bishop(true,1);
         var bpawn = new Pawn(false,1);
@@ -282,13 +337,13 @@ public class ChessRules
 
         var actual  = board.getPieceOnSquare(3,3).Attack(3,3,board);
                 
-        Assert.Empty(actual);
+        Xunit.Assert.Empty(actual);
     }
 
     [Fact]
     public void KnightMovePattern()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wknight = new Knight(true,1);
         var wbishop = new Bishop(true,1);
         
@@ -310,13 +365,13 @@ public class ChessRules
         expectedmoveList.Sort();
         actual.Sort();    
                 
-        Assert.Equal(expectedmoveList,actual);
+        Xunit.Assert.Equal(expectedmoveList,actual);
     }
 
     [Fact]
     public void KnightD4Attacks2()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wknight = new Knight(true,1);
         var wbishop = new Bishop(true,1);
         var bpawn =  new Pawn(false, 1);
@@ -337,13 +392,13 @@ public class ChessRules
         expectedAttackList.Sort();
         actual.Sort();    
                 
-        Assert.Equal(expectedAttackList,actual);
+        Xunit.Assert.Equal(expectedAttackList,actual);
     }
 
     [Fact]
     public void KingMovesB2()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wking = new King(true,1);
         
         
@@ -366,13 +421,13 @@ public class ChessRules
         expectedMovesList.Sort();
         actual.Sort();    
                 
-        Assert.Equal(expectedMovesList,actual);
+        Xunit.Assert.Equal(expectedMovesList,actual);
     }
     
     [Fact]
     public void KingMovesA1()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wking = new King(true,1);
         
         
@@ -389,12 +444,12 @@ public class ChessRules
         expectedMovesList.Sort();
         actual.Sort();    
                 
-        Assert.Equal(expectedMovesList,actual);
+        Xunit.Assert.Equal(expectedMovesList,actual);
     }
     [Fact]
     public void PawnA1()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wpawn = new Pawn(true,1);
         
         board.getBoard()[0,0].placePiece(wpawn);
@@ -408,13 +463,13 @@ public class ChessRules
         expectedMovesList.Sort();
         actual.Sort();    
                 
-        Assert.Equal(expectedMovesList,actual);
+        Xunit.Assert.Equal(expectedMovesList,actual);
     }
 
     [Fact]
     public void KingA1OnlyLegalMoveIsA2()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wking = new King(true,1);
         var brook = new Rook(false,1);
 
@@ -430,14 +485,14 @@ public class ChessRules
         expectedMovesList.Sort();
         actual.Sort();    
                 
-        Assert.Equal(expectedMovesList,actual);
+        Xunit.Assert.Equal(expectedMovesList,actual);
     }
 
     [Fact]
     public void KingCastlingRight()
     {
         //Start
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wking = new King(true,1);
         var wrook = new Rook(true,1);
         board.getBoard()[0,4].placePiece(wking);
@@ -456,15 +511,15 @@ public class ChessRules
         var castleRookPos = actualRook?.CastleMove(0,7,board);
 
         //Assert
-        Assert.Equal(expectedKingpos,castleKingPos);
-        Assert.Equal(expectedRookpos,castleRookPos);
+        Xunit.Assert.Equal(expectedKingpos,castleKingPos);
+        Xunit.Assert.Equal(expectedRookpos,castleRookPos);
     }
 
     [Fact]
     public void KingCastlingLeft()
     {
         //Start
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wking = new King(true,1);
         var wrook = new Rook(true,1);
         board.getBoard()[0,4].placePiece(wking);
@@ -483,15 +538,15 @@ public class ChessRules
         var castleRookPos = actualRook?.CastleMove(0,0,board);
 
         //Assert
-        Assert.Equal(expectedKingpos,castleKingPos);
-        Assert.Equal(expectedRookpos,castleRookPos);
+        Xunit.Assert.Equal(expectedKingpos,castleKingPos);
+        Xunit.Assert.Equal(expectedRookpos,castleRookPos);
     }
 
         [Fact]
     public void KingCastlingLeftisBlocked()
     {
         //Start
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var wking = new King(true,1);
         var wrook = new Rook(true,1);
         var wknight = new Knight(true,1);
@@ -509,15 +564,15 @@ public class ChessRules
         var castleRookPos = actualRook?.CastleMove(0,0,board);
 
         //Assert
-        Assert.Empty(castleKingPos);
-        Assert.Null(castleRookPos);
+        Xunit.Assert.Empty(castleKingPos);
+        Xunit.Assert.Equal(castleRookPos,(0,3));
     }
 
 
     [Fact]
     public void KnightA1Moves()
     {
-        var board = new Board(8,true);
+        var board = new Board(8,true,false);
         var bknight = new Knight(false,1);
 
         board.getBoard()[0,0].placePiece(bknight);
@@ -532,10 +587,53 @@ public class ChessRules
         expectedMovesList.Sort();
         actual.Sort();    
                 
-        Assert.Equal(expectedMovesList,actual);
+        Xunit.Assert.Equal(expectedMovesList,actual);
     }
     
+    [Fact]
+    public void KingCastlingLeftPathIsAttacked()
+    {
+        //Start
+        var board = new Board(8,true,false);
+        var wking = new King(true,1);
+        var wrook = new Rook(true,1);
+        var brook = new Rook(false,1);
+
+        board.getBoard()[0,4].placePiece(wking);
+        board.getBoard()[0,0].placePiece(wrook);
+        board.getBoard()[7,2].placePiece(brook);
+
+        //Execute    
+        var actualKing = board.getPieceOnSquare(0,4) as King;
+        var castleKingPos = actualKing?.CastleMoves(0,4,board);
+
+        //Assert
+        Xunit.Assert.Empty(castleKingPos);
+    }
 
 
+    [Fact]
+    public void pinnedRook()
+    {
+        //Start
+        var board = new Board(8,true,false);
+        var wking = new King(true,1);
+        var wrook = new Rook(true,1);
+        var brook = new Rook(false,1);
 
+        board.getBoard()[0,4].placePiece(wking);
+        board.getBoard()[0,0].placePiece(wrook);
+        board.getBoard()[7,2].placePiece(brook);
+
+        //Execute    
+        var actualKing = board.getPieceOnSquare(0,4) as King;
+        var castleKingPos = actualKing?.CastleMoves(0,4,board);
+
+        //Assert
+        Xunit.Assert.Empty(castleKingPos);
+    }
+  }
+
+  
+    }
 }

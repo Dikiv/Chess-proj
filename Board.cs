@@ -6,17 +6,18 @@ public class Board{
     private Square[,] positions;
     private int dim;
 
-    public Board(int dim, bool side){
+    public Board(int dim, bool side, bool populate){
         //Sets Board Size
         this.positions = new Square[dim,dim];
         this.dim = dim;
 
         initBoard();
 
-        //populateStandard(side);
+        if(populate){
+            populateStandard(side);
+        }
+
         //positions[4,4].placePiece(new Bishop(true,3));
-        var bpawn = new King(false,1);
-        var brook = new Rook(true,1);
         
         
         /*
@@ -99,7 +100,7 @@ public class Board{
     False indicates Black to be at the bottom, and white to be at the top.
     True indicates White to be at the bottom, and black to be at the top.
     **/
-    private void populateStandard(bool side){
+    public void populateStandard(bool side){
 
         //create Pawns
         //Top 
@@ -163,22 +164,7 @@ public class Board{
                     }
                 }
             }
-        /*
-        if(!side){
-            
-        }else{
-            for(int i=dim-1; i>-1;i--){
-                for (int j=dim-1; j>-1;j--){
-                    if(((j+i)%2)==0){
-                        this.positions[i,j] = new Square(side,(i,j));
-                    }else{
-                        this.positions[i,j] = new Square(!side,(i,j));
-                    }
-                }
-            }
-        }
-        */
-    }
+     }
 
     public Square[,] getBoard(){
         return this.positions;
@@ -225,6 +211,18 @@ public class Board{
         return this.dim;
     }
 
+    
+    public (int,int) getKing(bool side){
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j<8 ; j++){
+                var p = getPieceOnSquare(i,j);
+                if(p is King king && p.getColor() == side){
+                    return (i,j);
+                }
+            }
+        }
+        return (-1,-1);
+    }
 
     
 }

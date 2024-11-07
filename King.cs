@@ -132,27 +132,30 @@ public class King : Piece
 
         var CastlesList = new List<(int,int)>();
         
+        var attackedSquares = getAttackedSquares(board);
+
         if(!moved){
             //check empty spaces between king + rook
             for(int i = 1; i < col ; i++){
-                if(board.isSquareTaken(row,i)){
-                    break;
-                }else if(i == col-1){
-                    var rok = board.getPieceOnSquare(row,0);
-                    if(rok is Rook && !rok.getHasMoved()){
-                        CastlesList.Add((row,col-2));
+                    if(board.isSquareTaken(row,i) || (attackedSquares.Contains((row,i)) && i >= (col-2))){
+                        break;
+                    }else if(i == col-1 && !attackedSquares.Contains((row,col-1))){
+                        var rok = board.getPieceOnSquare(row,0);
+                        if(rok is Rook && !rok.getHasMoved()){
+                            CastlesList.Add((row,col-2));
+                        }
                     }
-                }
             }
             for(int i = col+1; i < 7 ; i++){
-                if(board.isSquareTaken(row,i)){
-                    break;
-                }else if(i == 6){
-                    var rok = board.getPieceOnSquare(row,7);
-                    if(rok is Rook && !rok.getHasMoved()){
-                        CastlesList.Add((row,col+2));
+                    if(board.isSquareTaken(row,i) || (attackedSquares.Contains((row,i)) && i <= (col+2))){
+                        break;
+                    }else if(i == 6){
+                        var rok = board.getPieceOnSquare(row,7);
+                        if(rok is Rook && !rok.getHasMoved() && rok.getColor() == this.color){
+                            CastlesList.Add((row,col+2));
+                        }
                     }
-                }
+                
             }
         }
 
